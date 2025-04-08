@@ -1,0 +1,67 @@
+import SwiftUI
+import CoreLocationUI
+
+struct WelcomeView: View {
+    @EnvironmentObject var locationManager: LocationManager
+
+    @State private var cloudOffset: CGFloat = 0
+
+    var body: some View {
+        ZStack {
+            // Fond dégradé de turquoise à bleu marine
+            LinearGradient(gradient: Gradient(colors: [Color.cyan, Color.blue]), startPoint: .top, endPoint: .bottom)
+                .edgesIgnoringSafeArea(.all)
+            
+            VStack {
+                // Section avec une icône du soleil
+                VStack(spacing: 20) {
+                    HStack {
+                        // Icône du soleil jaune
+                        Image(systemName: "sun.max.fill")
+                            .resizable()
+                            .frame(width: 60, height: 60)
+                            .foregroundColor(.yellow)
+                        
+                        Text("Welcome to the Weather App")
+                            .bold()
+                            .font(.system(size: 34))
+                            .foregroundColor(.white)
+                            .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0, y: 5)
+                    }
+
+                    Text("Allow us to access your location to get the weather in your area.")
+                        .font(.title3)
+                        .foregroundColor(.white)
+                        .padding([.leading, .trailing], 30)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(2)
+                        .shadow(color: Color.black.opacity(0.2), radius: 8, x: 0, y: 4)
+                }
+                .padding(.top, 80)
+                
+                Spacer()
+                
+                // Bouton stylisé sans fond bleu
+                LocationButton(.shareCurrentLocation) {
+                    locationManager.requestLocation()
+                }
+                .cornerRadius(40)
+                .symbolVariant(.fill)
+                .frame(width: 280, height: 70)
+                .foregroundColor(.white)
+                .background(Color.clear) // Retirer le fond bleu
+                .clipShape(Capsule())
+                .shadow(color: Color.black.opacity(0.4), radius: 10, x: 0, y: 5)
+                .scaleEffect(1.05)
+                .padding()
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+    }
+}
+
+struct WelcomeView_Previews: PreviewProvider {
+    static var previews: some View {
+        WelcomeView()
+    }
+}
